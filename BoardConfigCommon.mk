@@ -1,4 +1,4 @@
-# Copyright (C) 2022 Paranoid Android
+# Copyright (C) 2024 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -149,6 +149,9 @@ BOARD_USES_METADATA_PARTITION := true
 TARGET_COPY_OUT_PRODUCT := product
 TARGET_COPY_OUT_SYSTEM_EXT := system_ext
 TARGET_COPY_OUT_VENDOR := vendor
+
+# QCOM/Common
+include device/qcom/common/BoardConfigQcom.mk
 
 # Recovery
 BOARD_INCLUDE_RECOVERY_DTBO := true

@@ -1,4 +1,4 @@
-# Copyright (C) 2022 Paranoid Android
+# Copyright (C) 2024 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -98,6 +98,12 @@ PRODUCT_VENDOR_PROPERTIES += \
     ro.vendor.audio.soundtrigger=sva
 
 # Bluetooth
+TARGET_USE_QTI_BT_STACK := false
+
+PRODUCT_COPY_FILES += \
+    frameworks/av/services/audiopolicy/config/a2dp_in_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_in_audio_policy_configuration.xml \
+    frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration.xml
+
 PRODUCT_PRODUCT_PROPERTIES += \
     bluetooth.hardware.power.idle_cur_ma=7 \
     bluetooth.hardware.power.operating_voltage_mv=3700 \
@@ -136,8 +142,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.raw.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.raw.xml
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/camera/camxoverridesettings.txt:$(TARGET_COPY_OUT_VENDOR)/etc/camera/camxoverridesettings.txt \
-    $(LOCAL_PATH)/configs/camera/st_license.lic:$(TARGET_COPY_OUT_VENDOR)/etc/camera/st_license.lic
+    $(LOCAL_PATH)/configs/camera/camxoverridesettings.txt:$(TARGET_COPY_OUT_VENDOR)/etc/camera/camxoverridesettings.txt
 
 # Charger
 PRODUCT_COPY_FILES += \
@@ -282,7 +287,6 @@ PRODUCT_SYSTEM_EXT_PROPERTIES += \
 
 # Overlays
 PRODUCT_PACKAGES += \
-    AOSPABengalFrameworksOverlay \
     AvoidAppsInCutoutOverlay \
     BengalCarrierConfigOverlay \
     BengalFrameworksOverlay \
@@ -298,7 +302,7 @@ PRODUCT_COPY_FILES += \
 # Public libraries
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/public.libraries.txt:$(TARGET_COPY_OUT_VENDOR)/etc/public.libraries.txt
-    
+
 # Rootdir / Init files
 PRODUCT_PACKAGES += \
     init.qti.dcvs.sh \
@@ -318,8 +322,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init/init.recovery.qcom.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.qcom.rc
 
-# QC common
+# QCOM/Common
 TARGET_BOARD_PLATFORM := bengal
+TARGET_USE_BENGAL_HALS := true
+
+$(call inherit-product, device/qcom/common/common.mk)
 
 TARGET_COMMON_QTI_COMPONENTS += \
     alarm \
@@ -384,6 +391,7 @@ PRODUCT_VENDOR_PROPERTIES += \
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH) \
+    hardware/qcom-caf/bootctrl \
     hardware/xiaomi
 
 # Treble
@@ -417,9 +425,6 @@ PRODUCT_VENDOR_PROPERTIES += \
     ro.hardware.wlan.dbs=0 \
     ro.hardware.wlan.mimo=0 \
     ro.hardware.wlan.vendor=qcom
-
-PRODUCT_VENDOR_PROPERTIES += \
-    ro.telephony.iwlan_operation_mode=legacy
 
 # Inherit from vendor
 $(call inherit-product, vendor/xiaomi/sm6225-common/sm6225-common-vendor.mk)
